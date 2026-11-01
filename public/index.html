@@ -1,1 +1,254 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1118">
+  <title>Xray Manager</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-icon">X</div>
+        <div>
+          <strong>XRAY MANAGER</strong>
+          <small>VPN CONTROL PANEL</small>
+        </div>
+      </div>
+
+      <div class="nav-label">MAIN MENU</div>
+      <button class="nav active" data-page="dashboard">▦ Dashboard</button>
+      <button class="nav" data-page="users">♙ VPN Users</button>
+      <button class="nav" data-page="inbounds">◈ Inbounds</button>
+      <button class="nav" data-page="settings">⚙ Settings</button>
+
+      <div class="sidebar-bottom">
+        <span class="online-dot"></span>
+        System Panel
+        <button id="logout">Logout ↗</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="menuBtn" class="menu-btn">☰</button>
+        <div>
+          <strong id="pageTitle">Dashboard</strong>
+          <small> Xray Manager / Control Center</small>
+        </div>
+        <div class="admin-label">ADMINISTRATOR</div>
+      </header>
+
+      <section id="loginPage" class="login-page">
+        <div class="login-card">
+          <div class="brand-icon large">X</div>
+          <h1>Xray Manager</h1>
+          <p>Administrator Sign In</p>
+
+          <form id="loginForm">
+            <label>Username</label>
+            <input name="username" autocomplete="username"
+                   placeholder="Enter username" required>
+
+            <label>Password</label>
+            <input name="password" type="password"
+                   autocomplete="current-password"
+                   placeholder="Enter password" required>
+
+            <button class="primary full">Sign In</button>
+            <p id="loginError" class="error"></p>
+          </form>
+        </div>
+      </section>
+
+      <section id="panel" hidden>
+        <section class="page" id="dashboardPage">
+          <div class="welcome">
+            <div>
+              <h1>Dashboard Overview</h1>
+              <p>Monitor your Xray Manager server.</p>
+            </div>
+            <button class="primary" id="refreshBtn">↻ Refresh</button>
+          </div>
+
+          <div class="stats">
+            <article class="stat-card">
+              <span>Total Users</span>
+              <strong id="totalUsers">0</strong>
+              <small>Registered records</small>
+            </article>
+            <article class="stat-card">
+              <span>Enabled Users</span>
+              <strong id="enabledUsers">0</strong>
+              <small>Enabled records</small>
+            </article>
+            <article class="stat-card">
+              <span>Disabled Users</span>
+              <strong id="disabledUsers">0</strong>
+              <small>Disabled records</small>
+            </article>
+            <article class="stat-card">
+              <span>CPU Cores</span>
+              <strong id="cpuCores">-</strong>
+              <small>Server information</small>
+            </article>
+          </div>
+
+          <div class="grid-two">
+            <article class="card">
+              <h2>Server Information</h2>
+              <div class="info-row">
+                <span>Hostname</span><strong id="hostname">-</strong>
+              </div>
+              <div class="info-row">
+                <span>Platform</span><strong id="platform">-</strong>
+              </div>
+              <div class="info-row">
+                <span>Uptime</span><strong id="uptime">-</strong>
+              </div>
+              <div class="info-row">
+                <span>Memory Usage</span><strong id="memory">-</strong>
+              </div>
+            </article>
+
+            <article class="card">
+              <h2>Xray Core Status</h2>
+              <div class="status-box">
+                <span class="status-dot"></span>
+                <strong id="xrayStatus">Not Connected</strong>
+              </div>
+              <p id="xrayMessage">
+                Xray Core integration is not configured yet.
+              </p>
+              <small class="muted">
+                Live Xray management is not available in this MVP.
+              </small>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" id="usersPage" hidden>
+          <div class="welcome">
+            <div>
+              <h1>VPN Users</h1>
+              <p>Create and manage local user records.</p>
+            </div>
+            <button class="primary" id="showCreate">+ Add User</button>
+          </div>
+
+          <article class="card" id="createBox" hidden>
+            <h2>Create VPN User Record</h2>
+            <p class="notice">
+              This version stores user records only. It does not yet
+              create live Xray clients or importable VPN links.
+            </p>
+
+            <form id="userForm" class="form-grid">
+              <div>
+                <label>Username</label>
+                <input name="username" required minlength="3"
+                       maxlength="32" placeholder="vpn_user">
+              </div>
+              <div>
+                <label>Protocol</label>
+                <select name="protocol">
+                  <option value="vless">VLESS</option>
+                  <option value="vmess">VMess</option>
+                  <option value="trojan">Trojan</option>
+                  <option value="shadowsocks">Shadowsocks</option>
+                </select>
+              </div>
+              <div>
+                <label>Traffic Limit (GB)</label>
+                <input name="trafficLimitGb" type="number"
+                       min="0" value="0">
+              </div>
+              <div>
+                <label>Expiry Date</label>
+                <input name="expiresAt" type="date">
+              </div>
+              <button class="primary" type="submit">Create User</button>
+              <button class="secondary" type="button"
+                      id="cancelCreate">Cancel</button>
+            </form>
+          </article>
+
+          <article class="card">
+            <div class="card-heading">
+              <h2>User List</h2>
+              <button class="secondary" id="reloadUsers">↻ Reload</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Protocol</th>
+                    <th>UUID</th>
+                    <th>Expiry</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="userRows">
+                  <tr><td colspan="6">Loading users...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section class="page" id="inboundsPage" hidden>
+          <div class="welcome">
+            <div>
+              <h1>Inbound Management</h1>
+              <p>Manage Xray inbound configurations.</p>
+            </div>
+          </div>
+          <article class="card">
+            <h2>Inbound Status</h2>
+            <p class="notice">
+              Inbound creation and editing are not implemented yet.
+              No changes will be made to your existing Xray configuration.
+            </p>
+          </article>
+        </section>
+
+        <section class="page" id="settingsPage" hidden>
+          <div class="welcome">
+            <div>
+              <h1>Settings</h1>
+              <p>Panel configuration information.</p>
+            </div>
+          </div>
+          <article class="card">
+            <h2>Panel Information</h2>
+            <div class="info-row">
+              <span>Panel Name</span><strong>Xray Manager</strong>
+            </div>
+            <div class="info-row">
+              <span>Current Address</span>
+              <strong id="panelAddress">-</strong>
+            </div>
+            <div class="info-row">
+              <span>Connection</span>
+              <strong id="connectionType">-</strong>
+            </div>
+            <p class="notice">
+              Public access should use HTTPS. Plain HTTP login is not
+              secure for public internet use.
+            </p>
+          </article>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
