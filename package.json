@@ -1,1 +1,22 @@
 
+{
+  "name": "xray-manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Modern Xray VPN Management Panel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.8.1",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "qrcode": "^1.5.4"
+  }
+}
